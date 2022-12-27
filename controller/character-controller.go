@@ -52,7 +52,8 @@ func (controller *characterController) FindAll(ctx *gin.Context) {
 }
 
 func (controller *characterController) Save(ctx *gin.Context) {
-	newCharacter := entity.Character{}
+	var newCharacter entity.Character
+
 	ctx.BindJSON(&newCharacter)
 
 	controller.service.Save(newCharacter)
