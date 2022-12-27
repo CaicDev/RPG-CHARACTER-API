@@ -8,17 +8,23 @@ import (
 	"rpg-api.com/m/service"
 )
 
-type CharacterController struct {
-	service *service.CharacterService
+type CharacterController interface {
+	FindById(*gin.Context)
+	FindAll(*gin.Context)
+	Save(*gin.Context)
 }
 
-func New(service *service.CharacterService) *CharacterController {
-	return &CharacterController{
+type characterController struct {
+	service service.CharacterService
+}
+
+func New(service service.CharacterService) CharacterController {
+	return &characterController{
 		service: service,
 	}
 }
 
-func (controller *CharacterController) FindById(ctx *gin.Context) {
+func (controller *characterController) FindById(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 
 	if err != nil {
@@ -41,11 +47,11 @@ func (controller *CharacterController) FindById(ctx *gin.Context) {
 	ctx.JSON(200, character)
 }
 
-func (controller *CharacterController) FindAll(ctx *gin.Context) {
+func (controller *characterController) FindAll(ctx *gin.Context) {
 	ctx.JSON(200, controller.service.FindAll())
 }
 
-func (controller *CharacterController) Save(ctx *gin.Context) {
+func (controller *characterController) Save(ctx *gin.Context) {
 	newCharacter := entity.Character{}
 	ctx.BindJSON(&newCharacter)
 

@@ -6,18 +6,23 @@ import (
 	"rpg-api.com/m/entity"
 )
 
-type CharacterService struct {
+type CharacterService interface {
+	FindById(uint32) (entity.Character, error)
+	FindAll() []entity.Character
+	Save(entity.Character) entity.Character
+}
+
+type characterService struct {
 	characters []entity.Character
 }
 
-func New() *CharacterService {
-	return &CharacterService{}
+func New() CharacterService {
+	return &characterService{}
 }
 
-func (service *CharacterService) FindById(id uint32) (entity.Character, error) {
-	characters_list := service.characters
-	for _, character := range characters_list  {
-		if character.id == id {
+func (service *characterService) FindById(id uint32) (entity.Character, error) {
+	for _, character := range service.characters {
+		if character.ID == id {
 			return character, nil
 		}
 	}
@@ -25,11 +30,11 @@ func (service *CharacterService) FindById(id uint32) (entity.Character, error) {
 
 }
 
-func (service *CharacterService) FindAll() []entity.Character {
+func (service *characterService) FindAll() []entity.Character {
 	return service.characters
 }
 
-func (service *CharacterService) Save(character entity.Character) entity.Character {
+func (service *characterService) Save(character entity.Character) entity.Character {
 	service.characters = append(service.characters, character)
 
 	return character
