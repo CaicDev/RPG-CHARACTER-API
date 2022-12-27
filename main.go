@@ -6,18 +6,13 @@ import (
 	"rpg-api.com/m/service"
 )
 
-
 var (
-	characterService service.CharacterService = service.New()
+	characterService    service.CharacterService       = service.New()
 	characterController controller.CharacterController = controller.New(characterService)
 )
 
 func main() {
 	server := gin.Default()
-
-	server.GET("/", func(ctx *gin.Context) {
-		ctx.String(200, "Hello")
-	})
 
 	apiGroup := server.Group("/api")
 	{
