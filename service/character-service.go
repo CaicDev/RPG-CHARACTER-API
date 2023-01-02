@@ -9,7 +9,7 @@ import (
 type CharacterService interface {
 	FindById(uint32) (entity.Character, error)
 	FindAll() []entity.Character
-	Save(entity.Character) entity.Character
+	Save(entity.NewCharacter) entity.Character
 }
 
 type characterService struct {
@@ -34,7 +34,13 @@ func (service *characterService) FindAll() []entity.Character {
 	return service.characters
 }
 
-func (service *characterService) Save(character entity.Character) entity.Character {
+func (service *characterService) Save(newCharacter entity.NewCharacter) entity.Character {
+
+	character := entity.Character{
+		ID:   uint32(len(service.characters)) + 1,
+		Name: newCharacter.Name, Description: newCharacter.Description,
+		Strength: newCharacter.Strength, Speed: newCharacter.Speed,
+	}
 	service.characters = append(service.characters, character)
 
 	return character
