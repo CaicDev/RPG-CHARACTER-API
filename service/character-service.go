@@ -26,7 +26,7 @@ func (service *characterService) FindById(id uint32) (entity.Character, error) {
 			return character, nil
 		}
 	}
-	return entity.Character{}, errors.New("Cannot find user with this id")
+	return entity.Character{}, errors.New("cannot find user with this id")
 
 }
 
