@@ -39,7 +39,7 @@ func (service *characterService) Save(newCharacter entity.NewCharacter) entity.C
 	character := entity.Character{
 		ID:   uint32(len(service.characters)) + 1,
 		Name: newCharacter.Name, Description: newCharacter.Description,
-		Strength: newCharacter.Strength, Speed: newCharacter.Speed,
+		Magic: newCharacter.Magic, Strength: newCharacter.Strength, Speed: newCharacter.Speed,
 	}
 	service.characters = append(service.characters, character)
 
