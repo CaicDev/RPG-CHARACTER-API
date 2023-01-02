@@ -52,7 +52,7 @@ func (controller *characterController) FindAll(ctx *gin.Context) {
 }
 
 func (controller *characterController) Save(ctx *gin.Context) {
-	var newCharacter entity.Character
+	var newCharacter entity.NewCharacter
 
 	ctx.BindJSON(&newCharacter)
 
