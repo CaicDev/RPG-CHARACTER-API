@@ -1,7 +1,10 @@
 package main
 
 import (
+	"os"
+
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"rpg-api.com/m/controller"
 	"rpg-api.com/m/service"
 )
@@ -12,7 +15,19 @@ var (
 )
 
 func main() {
+	err := godotenv.Load()
+
+	if err != nil {
+		panic("Cannot loading the .env file" + err.Error())
+	}
+
+	admin, password := os.Getenv("ADMIN"), os.Getenv("PASSWORD")
+
 	server := gin.Default()
+
+	server.Use(gin.BasicAuth(gin.Accounts{
+		admin: password,
+	}))
 
 	apiGroup := server.Group("/api")
 	{
