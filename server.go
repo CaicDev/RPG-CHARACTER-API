@@ -21,7 +21,7 @@ func main() {
 		panic("Cannot loading the .env file" + err.Error())
 	}
 
-	admin, password := os.Getenv("ADMIN"), os.Getenv("PASSWORD")
+	admin, password, port := os.Getenv("ADMIN"), os.Getenv("PASSWORD"), os.Getenv("PORT")
 
 	server := gin.Default()
 
@@ -36,5 +36,5 @@ func main() {
 		apiGroup.POST("/character", characterController.Save)
 	}
 
-	server.Run("127.0.0.1:8080")
+	server.Run(":" + port)
 }
