@@ -1,48 +1,58 @@
 package service
 
 import (
-	"errors"
-
+	"gorm.io/gorm"
 	"rpg-api.com/m/entity"
 )
 
 type CharacterService interface {
-	FindById(uint32) (entity.Character, error)
+	FindById(uint) entity.Character
 	FindAll() []entity.Character
 	Save(entity.NewCharacter) entity.Character
+	Delete(uint)
 }
 
 type characterService struct {
-	characters []entity.Character
+	db *gorm.DB
 }
 
-func New() CharacterService {
-	return &characterService{}
-}
-
-func (service *characterService) FindById(id uint32) (entity.Character, error) {
-	for _, character := range service.characters {
-		if character.ID == id {
-			return character, nil
-		}
+func New(db *gorm.DB) CharacterService {
+	return &characterService{
+		db,
 	}
-	return entity.Character{}, errors.New("cannot find user with this id")
+}
+
+func (service *characterService) FindById(id uint) entity.Character {
+	var character entity.Character
+
+	service.db.First(&character, id)
+
+	return character
 
 }
 
 func (service *characterService) FindAll() []entity.Character {
-	return service.characters
+	var characters []entity.Character
+
+	service.db.Find(&characters)
+
+	return characters
 }
 
 func (service *characterService) Save(newCharacter entity.NewCharacter) entity.Character {
 
 	character := entity.Character{
-		ID:   uint32(len(service.characters)) + 1,
 		Name: newCharacter.Name, Description: newCharacter.Description,
 		Magic: newCharacter.Magic, Strength: newCharacter.Strength,
 		Speed: newCharacter.Speed, Intelligence: newCharacter.Intelligence,
 	}
-	service.characters = append(service.characters, character)
+
+	service.db.Create(&character)
 
 	return character
+}
+
+func (service *characterService) Delete(id uint) {
+	 
+	service.db.Delete(&entity.Character{}, id)
 }
