@@ -34,15 +34,9 @@ func (controller *characterController) FindById(ctx *gin.Context) {
 		return
 	}
 
-	uid := uint32(id)
+	uid := uint(id)
 
-	character, err := controller.service.FindById(uid)
-
-	if err != nil {
-		ctx.JSON(404, gin.H{
-			"error": err.Error(),
-		})
-	}
+	character := controller.service.FindById(uid)
 
 	ctx.JSON(200, character)
 }
