@@ -1,7 +1,9 @@
 package entity
 
+import "gorm.io/gorm"
+
 type Character struct {
-	ID           uint32 `json:"id" binding:"required"`
+	gorm.Model
 	Name         string `json:"name" binding:"required"`
 	Description  string `json:"description" binding:"required"`
 	Magic        uint32 `json:"magic" binding:"required"`
