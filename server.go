@@ -12,7 +12,7 @@ import (
 )
 
 
-
+const PORT = "8080"
 
 func main() {
 	err := godotenv.Load()
@@ -31,10 +31,8 @@ func main() {
 		characterService    service.CharacterService       = service.New(db)
 		characterController controller.CharacterController = controller.New(characterService)
 	)
-	
 
-
-	admin, password, port := os.Getenv("ADMIN"), os.Getenv("PASSWORD"), os.Getenv("PORT")
+	admin, password := os.Getenv("ADMIN"), os.Getenv("PASSWORD")
 
 	server := gin.Default()
 
@@ -49,5 +47,5 @@ func main() {
 		apiGroup.POST("/character", characterController.Save)
 	}
 
-	server.Run(":" + port)
+	server.Run(":"+PORT)
 }
