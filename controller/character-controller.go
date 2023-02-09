@@ -36,13 +36,27 @@ func (controller *characterController) FindById(ctx *gin.Context) {
 
 	uid := uint(id)
 
-	character := controller.service.FindById(uid)
+	character, err := controller.service.FindById(uid)
+
+	if err != nil {
+		ctx.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+	}
 
 	ctx.JSON(200, character)
 }
 
 func (controller *characterController) FindAll(ctx *gin.Context) {
-	ctx.JSON(200, controller.service.FindAll())
+
+	characters, err := controller.service.FindAll()
+
+	if err != nil {
+		ctx.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+	}
+	ctx.JSON(200, characters)
 }
 
 func (controller *characterController) Save(ctx *gin.Context) {
@@ -50,7 +64,13 @@ func (controller *characterController) Save(ctx *gin.Context) {
 
 	ctx.BindJSON(&newCharacter)
 
-	controller.service.Save(newCharacter)
+	character, err := controller.service.Save(newCharacter)
 
-	ctx.JSON(200, newCharacter)
+	if err != nil {
+		ctx.JSON(500, gin.H{
+			"error": err.Error(),
+		})
+	}
+
+	ctx.JSON(200, character)
 }
