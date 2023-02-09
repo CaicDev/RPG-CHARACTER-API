@@ -12,6 +12,7 @@ type CharacterController interface {
 	FindById(*gin.Context)
 	FindAll(*gin.Context)
 	Save(*gin.Context)
+	Delete(*gin.Context)
 }
 
 type characterController struct {
