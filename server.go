@@ -8,9 +8,9 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"rpg-api.com/m/controller"
+	"rpg-api.com/m/entity"
 	"rpg-api.com/m/service"
 )
-
 
 const PORT = "8080"
 
@@ -26,6 +26,8 @@ func main() {
 	if err != nil {
 		panic("cannot create database " + err.Error())
 	}
+
+	db.AutoMigrate(&entity.Character{})
 
 	var (
 		characterService    service.CharacterService       = service.New(db)
@@ -48,5 +50,5 @@ func main() {
 		apiGroup.DELETE("/character/:id", characterController.Delete)
 	}
 
-	server.Run(":"+PORT)
+	server.Run(":" + PORT)
 }
