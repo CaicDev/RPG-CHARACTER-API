@@ -6,10 +6,10 @@ import (
 )
 
 type CharacterService interface {
-	FindById(uint) entity.Character
-	FindAll() []entity.Character
-	Save(entity.NewCharacter) entity.Character
-	Delete(uint)
+	FindById(uint) (entity.Character, error)
+	FindAll() ([]entity.Character, error)
+	Save(entity.NewCharacter) (entity.Character, error)
+	Delete(uint) error
 }
 
 type characterService struct {
@@ -22,24 +22,24 @@ func New(db *gorm.DB) CharacterService {
 	}
 }
 
-func (service *characterService) FindById(id uint) entity.Character {
+func (service *characterService) FindById(id uint) (entity.Character, error) {
 	var character entity.Character
 
-	service.db.First(&character, id)
+	err := service.db.First(&character, id).Error
 
-	return character
+	return character, err
 
 }
 
-func (service *characterService) FindAll() []entity.Character {
+func (service *characterService) FindAll() ([]entity.Character, error) {
 	var characters []entity.Character
 
-	service.db.Find(&characters)
+	err := service.db.Find(&characters).Error
 
-	return characters
+	return characters, err
 }
 
-func (service *characterService) Save(newCharacter entity.NewCharacter) entity.Character {
+func (service *characterService) Save(newCharacter entity.NewCharacter) (entity.Character, error) {
 
 	character := entity.Character{
 		Name: newCharacter.Name, Description: newCharacter.Description,
@@ -47,12 +47,15 @@ func (service *characterService) Save(newCharacter entity.NewCharacter) entity.C
 		Speed: newCharacter.Speed, Intelligence: newCharacter.Intelligence,
 	}
 
-	service.db.Create(&character)
+	err := service.db.Create(&character).Error
 
-	return character
+
+	return character, err
 }
 
-func (service *characterService) Delete(id uint) {
-	 
-	service.db.Delete(&entity.Character{}, id)
+func (service *characterService) Delete(id uint) error {
+
+	err := service.db.Delete(&entity.Character{}, id).Error
+
+	return err
 }
