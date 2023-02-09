@@ -45,6 +45,7 @@ func main() {
 		apiGroup.GET("/character", characterController.FindAll)
 		apiGroup.GET("/character/:id", characterController.FindById)
 		apiGroup.POST("/character", characterController.Save)
+		apiGroup.DELETE("/character/:id", characterController.Delete)
 	}
 
 	server.Run(":"+PORT)

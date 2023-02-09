@@ -74,3 +74,29 @@ func (controller *characterController) Save(ctx *gin.Context) {
 
 	ctx.JSON(200, character)
 }
+
+func (controller *characterController) Delete(ctx *gin.Context) {
+
+	id, id_err := strconv.Atoi(ctx.Param("id"))
+
+	if id_err != nil {
+		ctx.JSON(500, gin.H{
+			"error": id_err.Error(),
+		})
+		return
+	}
+
+	uid := uint(id)
+
+	db_err := controller.service.Delete(uid)
+
+	if db_err != nil {
+		ctx.JSON(500, gin.H{
+			"error": db_err.Error(),
+		})
+	}
+
+	ctx.JSON(200, gin.H{
+		"message": "character delete succesfull",
+	})
+}
